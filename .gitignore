@@ -63,3 +63,6 @@ pip-wheel-metadata/
 
 # Mac OSX
 .DS_Store
+
+# Database
+astro_ghost/database
