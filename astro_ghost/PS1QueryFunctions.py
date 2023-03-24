@@ -100,6 +100,7 @@ def get_hosts(path, transient_fn, fn_Host, rad):
     if len(df_North) > 0:
         print("Finding northern sources with Pan-starrs...")
         find_host_info_PS1(df_North, fn_Host, dict_fn, path, rad, append=append)
+    # HERE IS WHERE WE CAN INSERT A CSV 
     host_df = pd.read_csv(path+"/"+fn_Host)
     host_df = host_df.drop_duplicates()
     host_df.to_csv(path+"/"+fn_Host[:-4]+"_cleaned.csv", index=False)
@@ -361,7 +362,7 @@ def ps1search(table="mean",release="dr1",format="csv",columns=None,baseurl="http
     verbose: print info about request
     **kw: other parameters (e.g., 'nDetections.min':2).  Note this is required!
     """
-
+    print('hello from ps1search')
     data = kw.copy()
     if not data:
         raise ValueError("You must specify some parameters for search")
@@ -369,6 +370,7 @@ def ps1search(table="mean",release="dr1",format="csv",columns=None,baseurl="http
     if format not in ("csv","votable","json"):
         raise ValueError("Bad value for format")
     url = "{baseurl}/{release}/{table}.{format}".format(**locals())
+    print(url)
     if columns:
         # check that column values are legal
         # create a dictionary to speed this up
@@ -388,7 +390,11 @@ def ps1search(table="mean",release="dr1",format="csv",columns=None,baseurl="http
 # either get or post works
 #    r = requests.post(url, data=data)
     r = requests.get(url, params=data)
-
+    # raise Exception
+    with open('/mnt/c/Users/berre/Desktop/CODE/Python/ghost/tests/ps1query.txt', 'w') as f:
+        f.write(r.text)
+        f.close()
+    # print(r.text)
     if verbose:
         print(r.url)
     r.raise_for_status()
@@ -414,7 +420,7 @@ def ps1cone(ra,dec,radius,table="stack",release="dr1",format="csv",columns=None,
     verbose: print info about request
     **kw: other parameters (e.g., 'nDetections.min':2)
     """
-
+    print(radius)
     data = kw.copy()
     data['ra'] = ra
     data['dec'] = dec
